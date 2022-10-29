@@ -8,9 +8,7 @@ class ListViewTest extends StatefulWidget {
 }
 
 class _ListViewTestState extends State<ListViewTest> with AutomaticKeepAliveClientMixin {
-  bool isFavourite = false;
-  final titles = List<String>.generate(100, (counter) => "Title $counter");
-  final subtitles = List<String>.generate(100, (counter) => "Subtitle $counter");
+  final data = List<Map>.generate(100, (index) => {'id': index, 'title': 'Test Title $index','subtitle': 'Tet SubTitle $index' ,'isFavourite': false});
 
   @override
   void initState() {
@@ -26,22 +24,22 @@ class _ListViewTestState extends State<ListViewTest> with AutomaticKeepAliveClie
   Widget build(BuildContext context) {
     super.build(context);
     return ListView.builder(
-      itemCount: titles.length,
+      itemCount: data.length,
       itemBuilder: (context, index) {
         return Card(
           child: ListTile(
-            title: Text(titles[index]),
-            subtitle: Text(subtitles[index]),
+            title: Text(data[index]['title']),
+            subtitle: Text(data[index]['subtitle']),
             leading: const CircleAvatar(
                 backgroundImage: NetworkImage(
                     "https://images.unsplash.com/photo-1547721064-da6cfb341d50")),
             trailing: Icon(
               Icons.star,
-              color: isFavourite ? Colors.yellow : Colors.grey,
+              color: data[index]['isFavourite'] ? Colors.yellow : Colors.grey,
             ),
             onTap: () {
               setState(() {
-                isFavourite = true;
+                data[index]['isFavourite'] = !data[index]['isFavourite'];
               });
             },
           ),

@@ -16,22 +16,36 @@ class _GridViewTestState extends State<GridViewTest> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            childAspectRatio: 2,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
-          ),
-          itemCount: testCases.length,
-          itemBuilder: (BuildContext context, index) {
-            return Card(
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(testCases[index]["name"]),
-              ),
-            );
-          }),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          double width = constraints.constrainWidth();
+          return width > 600
+              ? GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: width > 600 ? 3 : 2,
+                    childAspectRatio: width > 600 ? 3 : 2,
+                  ),
+                  itemCount: testCases.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return Card(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(testCases[index]["name"]),
+                      ),
+                    );
+                  })
+              : ListView.builder(
+                  itemCount: testCases.length,
+                  itemBuilder: (context, index) => Card(
+                    child: Center(
+                      child: ListTile(
+                        title: Text(testCases[index]["name"]),
+                      ),
+                    ),
+                  ),
+                );
+        },
+      ),
     );
   }
 }
